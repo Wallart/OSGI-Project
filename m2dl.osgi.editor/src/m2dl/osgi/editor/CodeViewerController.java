@@ -134,7 +134,7 @@ public class CodeViewerController {
 				List<String> lines = Files.readAllLines(path);
 				String content = String.join("\n", lines);
 				
-				this.webViewer.getEngine().loadContent(javaParser.replace());
+				this.webViewer.getEngine().loadContent(javaParser.replace(content));
 			}
 			catch(IOException e) {
 				Activator.logger.error("Cannot load file : "+e.toString());

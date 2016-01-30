@@ -37,7 +37,7 @@ public class Activator implements BundleActivator {
 		
 		ServiceReference<?>[] references = bundleContext.getServiceReferences(JavaParser.class.getName(), "(name=JavaParser)");
 		JavaParser parser = (JavaParser) bundleContext.getService(references[0]);
-		System.out.println(parser.replace());
+		//System.out.println(parser.replace("LOL"));
 		
 		/*
 		 * Configuring the logger.

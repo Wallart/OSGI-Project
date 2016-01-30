@@ -20,7 +20,7 @@ public class JavaParserTrackerCustomizer implements ServiceTrackerCustomizer<Jav
 
 		System.out.println("A new \"JavaParser\" appeared with the extention type = "+serviceReference.getProperty("my.metadata.type"));
 
-		service.replace();
+		//service.replace();
 		return service;
 	}
 
