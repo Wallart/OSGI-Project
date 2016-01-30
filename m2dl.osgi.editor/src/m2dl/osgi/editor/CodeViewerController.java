@@ -20,9 +20,12 @@ import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import m2dl.osgi.service.javaparser.JavaParser;
 
 public class CodeViewerController {
 
+	JavaParser javaParser;
+	
 	/**
 	 * The main window of the application.
 	 */
@@ -130,7 +133,8 @@ public class CodeViewerController {
 			try {
 				List<String> lines = Files.readAllLines(path);
 				String content = String.join("\n", lines);
-				this.webViewer.getEngine().loadContent(content);
+				
+				this.webViewer.getEngine().loadContent(javaParser.replace());
 			}
 			catch(IOException e) {
 				Activator.logger.error("Cannot load file : "+e.toString());
@@ -177,5 +181,8 @@ public class CodeViewerController {
 	public void setPrimaryStage(final Stage _stage) {
 		primaryStage = _stage;
 	}
-
+	
+	public void setJavaParser(final JavaParser _parser) {
+		javaParser = _parser;
+	}
 }

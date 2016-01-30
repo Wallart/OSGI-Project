@@ -5,6 +5,9 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.util.tracker.ServiceTracker;
+import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
@@ -12,6 +15,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import m2dl.osgi.service.javaparser.JavaParser;
 
 public class Activator implements BundleActivator {
 
@@ -26,6 +30,15 @@ public class Activator implements BundleActivator {
 
 	@Override
 	public void start(BundleContext bundleContext) throws Exception {
+		
+		final ServiceTrackerCustomizer<JavaParser, JavaParser> trackerCustomizer = new JavaParserTrackerCustomizer(bundleContext);
+		final ServiceTracker<JavaParser, JavaParser> mainService = new ServiceTracker<JavaParser, JavaParser>(bundleContext, JavaParser.class.getName(), trackerCustomizer);
+		mainService.open();
+		
+		ServiceReference<?>[] references = bundleContext.getServiceReferences(JavaParser.class.getName(), "(name=JavaParser)");
+		JavaParser parser = (JavaParser) bundleContext.getService(references[0]);
+		System.out.println(parser.replace());
+		
 		/*
 		 * Configuring the logger.
 		 */
@@ -50,6 +63,7 @@ public class Activator implements BundleActivator {
 					final Scene scene = new Scene(root, 400, 400);
 
 					final CodeViewerController controller = loader.getController();
+					controller.setJavaParser(parser);
 
 					controller.setPrimaryStage(primaryStage);
 

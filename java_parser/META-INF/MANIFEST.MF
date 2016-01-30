@@ -1,9 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Java_parser
-Bundle-SymbolicName: java_parser
+Bundle-SymbolicName: m2dl.osgi.service-javaparser
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: java_parser.Activator
+Bundle-Activator: m2dl.osgi.service.javaparser.activator.Activator
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: org.osgi.framework;version="1.3.0"
+Export-Package: m2dl.osgi.service.javaparser
 Bundle-ActivationPolicy: lazy
