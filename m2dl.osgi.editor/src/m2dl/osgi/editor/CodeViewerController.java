@@ -20,11 +20,13 @@ import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import m2dl.osgi.service.cssparser.CssParser;
 import m2dl.osgi.service.javaparser.JavaParser;
 
 public class CodeViewerController {
 
 	JavaParser javaParser;
+	CssParser cssParser;
 	
 	/**
 	 * The main window of the application.
@@ -134,7 +136,15 @@ public class CodeViewerController {
 				List<String> lines = Files.readAllLines(path);
 				String content = String.join("\n", lines);
 				
-				this.webViewer.getEngine().loadContent(javaParser.replace(content));
+				if(radioMenuJava.isSelected()){
+					this.webViewer.getEngine().loadContent(javaParser.replace(content));	
+				}
+				else if(radioMenuCSS.isSelected()){
+					this.webViewer.getEngine().loadContent(cssParser.replace(content));
+				}
+				else{
+					this.webViewer.getEngine().loadContent(content);
+				}
 			}
 			catch(IOException e) {
 				Activator.logger.error("Cannot load file : "+e.toString());
@@ -147,10 +157,9 @@ public class CodeViewerController {
 
 	@FXML
 	void fireRadioMenuCSS(ActionEvent event) {
-		/*
-		 * If the css bundle is stated -> stop it otherwise start it (if it has
-		 * been loaded before)
-		 */
+		if(radioMenuCSS.isSelected()){
+			radioMenuJava.setSelected(false);
+		}
 	}
 
 	@FXML
@@ -163,10 +172,9 @@ public class CodeViewerController {
 
 	@FXML
 	void fireRadioMenuJava(ActionEvent event) {
-		/*
-		 * If the Java bundle is stated -> stop it otherwise start it (if it has
-		 * been loaded before)
-		 */
+		if(radioMenuJava.isSelected()){
+			radioMenuCSS.setSelected(false);
+		}
 	}
 
 	@FXML
@@ -184,5 +192,9 @@ public class CodeViewerController {
 	
 	public void setJavaParser(final JavaParser _parser) {
 		javaParser = _parser;
+	}
+	
+	public void setCssParser(final CssParser _parser) {
+		cssParser = _parser;
 	}
 }

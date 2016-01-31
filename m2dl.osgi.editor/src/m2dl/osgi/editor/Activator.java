@@ -16,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import m2dl.osgi.service.javaparser.JavaParser;
+import m2dl.osgi.service.cssparser.CssParser;
 
 public class Activator implements BundleActivator {
 
@@ -31,13 +32,19 @@ public class Activator implements BundleActivator {
 	@Override
 	public void start(BundleContext bundleContext) throws Exception {
 		
-		final ServiceTrackerCustomizer<JavaParser, JavaParser> trackerCustomizer = new JavaParserTrackerCustomizer(bundleContext);
-		final ServiceTracker<JavaParser, JavaParser> mainService = new ServiceTracker<JavaParser, JavaParser>(bundleContext, JavaParser.class.getName(), trackerCustomizer);
-		mainService.open();
+		final ServiceTrackerCustomizer<JavaParser, JavaParser> javaTrackerCustomizer = new JavaParserTrackerCustomizer(bundleContext);
+		final ServiceTracker<JavaParser, JavaParser> javaService = new ServiceTracker<JavaParser, JavaParser>(bundleContext, JavaParser.class.getName(), javaTrackerCustomizer);
+		javaService.open();
 		
-		ServiceReference<?>[] references = bundleContext.getServiceReferences(JavaParser.class.getName(), "(name=JavaParser)");
-		JavaParser parser = (JavaParser) bundleContext.getService(references[0]);
-		//System.out.println(parser.replace("LOL"));
+		ServiceReference<?>[] javaReferences = bundleContext.getServiceReferences(JavaParser.class.getName(), "(name=JavaParser)");
+		JavaParser javaParser = (JavaParser) bundleContext.getService(javaReferences[0]);
+		
+		final ServiceTrackerCustomizer<CssParser, CssParser> cssTrackerCustomizer = new CssParserTrackerCustomizer(bundleContext);
+		final ServiceTracker<CssParser, CssParser> cssService = new ServiceTracker<CssParser, CssParser>(bundleContext, CssParser.class.getName(), cssTrackerCustomizer);
+		cssService.open();
+		
+		ServiceReference<?>[] cssReferences = bundleContext.getServiceReferences(CssParser.class.getName(), "(name=CssParser)");
+		CssParser cssParser = (CssParser) bundleContext.getService(cssReferences[0]);
 		
 		/*
 		 * Configuring the logger.
@@ -63,7 +70,8 @@ public class Activator implements BundleActivator {
 					final Scene scene = new Scene(root, 400, 400);
 
 					final CodeViewerController controller = loader.getController();
-					controller.setJavaParser(parser);
+					controller.setJavaParser(javaParser);
+					controller.setCssParser(cssParser);
 
 					controller.setPrimaryStage(primaryStage);
 

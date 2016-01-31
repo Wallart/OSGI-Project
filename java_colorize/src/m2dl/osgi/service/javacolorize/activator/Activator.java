@@ -13,11 +13,11 @@ public class Activator implements BundleActivator {
 
 	public void start(BundleContext context) throws Exception {
 		
-		final JavaColorize javaParser = new JavaColorizeImpl();
+		final JavaColorize colorizer = new JavaColorizeImpl();
 		final Dictionary<String, String> properties = new Hashtable<String, String>();
 		properties.put("name", "JavaColorize");
 		
-		context.registerService(JavaColorize.class.getName(), javaParser, properties);
+		context.registerService(JavaColorize.class.getName(), colorizer, properties);
 		System.out.println("Starting Java Colorize service...");
 	}
 	
